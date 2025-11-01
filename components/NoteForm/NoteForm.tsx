@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import css from "./NoteForm.module.css";
 import type { Note, NoteTag } from "@/types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "@/lib/api";
+import { createNote } from "@/lib/api/notes";
 
 interface NoteFormProps {
   onClose: () => void;
@@ -24,8 +24,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
   });
-
-
 
   const formik = useFormik({
     initialValues: { title: "", content: "", tag: "Todo" as NoteTag },
@@ -95,9 +93,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           <option value="Meeting">Meeting</option>
           <option value="Shopping">Shopping</option>
         </select>
-        {formik.touched.tag && formik.errors.tag && (
-          <ErrorMessage message={formik.errors.tag} />
-        )}
+        {formik.touched.tag && formik.errors.tag && <ErrorMessage message={formik.errors.tag} />}
       </div>
 
       <div className={css.actions}>

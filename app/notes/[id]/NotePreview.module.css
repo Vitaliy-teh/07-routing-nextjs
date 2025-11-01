@@ -34,10 +34,24 @@
   white-space: pre-wrap;
 }
 
+.meta {
+  display: flex;
+}
+
 .date {
   font-size: 14px;
   color: #888;
   text-align: right;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: 80%;
+}
+
+.date::before {
+  content: "Created:";
+  margin-right: 2px;
+  color: #666;
 }
 
 .tag {
@@ -52,4 +66,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.backBtn {
+  align-self: flex-start;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline-block;
+  background-color: transparent;
 }

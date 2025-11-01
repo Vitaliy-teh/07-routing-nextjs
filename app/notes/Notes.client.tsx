@@ -3,12 +3,8 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-import {
-  fetchNotes,
-  deleteNote,
-  type FetchNotesResponse,
-} from "@/lib/api";
-import NoteList from "@/components/NoteList/NoteList";
+import { fetchNotes, deleteNote, type FetchNotesResponse } from "@/lib/api/notes";
+import NoteList from "@/components/NotesList/NotesList";
 import { SearchBox } from "@/components/SearchBox/SearchBox";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { Loader } from "@/components/Loader/Loader";
@@ -29,7 +25,7 @@ export default function NotesClient() {
   const { data, isLoading, error } = useQuery<FetchNotesResponse, Error>({
     queryKey: ["notes", page, debouncedSearch],
     queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
-    placeholderData: (prev) => prev,
+    placeholderData: prev => prev,
     staleTime: 5000,
   });
 
@@ -47,7 +43,7 @@ export default function NotesClient() {
       <header className={css.toolbar}>
         <SearchBox
           value={searchTerm}
-          onChange={(searchValue) => {
+          onChange={searchValue => {
             setSearchTerm(searchValue);
             setPage(1);
           }}
@@ -70,7 +66,6 @@ export default function NotesClient() {
         </Modal>
       )}
 
-          
       {isLoading && <Loader />}
       {error && <ErrorMessage message="Failed to load notes." />}
       {data?.notes?.length ? (

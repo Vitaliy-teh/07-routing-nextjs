@@ -1,0 +1,51 @@
+// "use client";
+
+// import React from "react";
+// import { useQuery } from "@tanstack/react-query";
+// import { fetchNotes } from "@/lib/api/notes";
+// import NoteList from "@/components/NotesList/NotesList";
+// import type { Note } from "@/types/note";
+
+// interface PageProps {
+//   params: { tag?: string[] };
+// }
+
+// export default function FilteredNotesPage({ params }: PageProps) {
+//   const tagSegments = params?.tag ?? [];
+//   const tag = tagSegments.length ? tagSegments.join("/") : "all";
+//   const queryTag = tag === "all" ? undefined : (tag as string);
+
+//   const { data, isLoading, error } = useQuery({
+//     queryKey: ["notes", queryTag],
+//     queryFn: () =>
+//       fetchNotes({
+//         page: 1,
+//         perPage: 20,
+//         tag: queryTag as any, // cast: lib/api handles undefined/"all"
+//       }),
+//     // note: fetchNotes returns { notes, totalPages }
+//   });
+
+//   if (isLoading) return <div>Loading...</div>;
+//   if (error) return <div>Failed to load notes</div>;
+
+//   const notes: Note[] = data?.notes ?? [];
+
+//   return (
+//     <section>
+//       <h2>Notes: {tag === "all" ? "All" : tag}</h2>
+//       <NoteList notes={notes} />
+//     </section>
+//   );
+// }
+
+import FilteredNotesClient from "./FilteredNotes.client";
+
+export default async function FilteredNotesPage({
+  params,
+}: {
+  params: Promise<{ tag?: string[] }>;
+}) {
+  const { tag } = await params;
+  return <FilteredNotesClient tagSegments={tag ?? []} />;
+}
