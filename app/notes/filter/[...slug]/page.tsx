@@ -44,8 +44,8 @@ import FilteredNotesClient from "./FilteredNotes.client";
 export default async function FilteredNotesPage({
   params,
 }: {
-  params: Promise<{ tag?: string[] }>;
+  params: Promise<{ slug?: string[] }>;
 }) {
-  const { tag } = await params;
-  return <FilteredNotesClient tagSegments={tag ?? []} />;
+  const { slug } = await params;
+  return <FilteredNotesClient tagSegments={slug ?? []} />;
 }
