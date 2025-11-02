@@ -9,7 +9,7 @@ export default function SidebarNotes() {
   return (
     <aside className={css.menuList}>
       <li className={css.menuItem}>
-        <Link href="/notes/filter/all" className={css.menuLink}>
+        <Link href="/notes" className={css.menuLink}>
           All notes
         </Link>
       </li>
