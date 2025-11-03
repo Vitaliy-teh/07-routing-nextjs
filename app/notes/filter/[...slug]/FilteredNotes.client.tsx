@@ -3,7 +3,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api/notes";
-import NoteList from "@/components/NotesList/NotesList";
+import NoteList from "@/components/NoteList/NoteList";
 import type { Note } from "@/types/note";
 
 interface Props {

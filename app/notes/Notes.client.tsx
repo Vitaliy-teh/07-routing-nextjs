@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { fetchNotes, deleteNote, type FetchNotesResponse } from "@/lib/api/notes";
-import NoteList from "@/components/NotesList/NotesList";
+import NoteList from "@/components/NoteList/NoteList";
 import { SearchBox } from "@/components/SearchBox/SearchBox";
 import { Pagination } from "@/components/Pagination/Pagination";
 import { Loader } from "@/components/Loader/Loader";
