@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchNotes } from "@/lib/api/notes";
+import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
 import type { Note } from "@/types/note";
 

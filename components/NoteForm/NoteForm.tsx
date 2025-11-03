@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import css from "./NoteForm.module.css";
 import type { Note, NoteTag } from "@/types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "@/lib/api/notes";
+import { createNote } from "@/lib/api";
 
 interface NoteFormProps {
   onClose: () => void;
