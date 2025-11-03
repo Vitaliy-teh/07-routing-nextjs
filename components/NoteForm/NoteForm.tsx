@@ -2,7 +2,7 @@ import { ErrorMessage } from "@/components/ErrorMessage/ErrorMessage";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import css from "./NoteForm.module.css";
-import type { Note, NoteTag } from "@/types/note";
+import type { Note, Tag } from "@/types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/lib/api";
 
@@ -26,14 +26,14 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   });
 
   const formik = useFormik({
-    initialValues: { title: "", content: "", tag: "Todo" as NoteTag },
+    initialValues: { title: "", content: "", tag: "Todo" as Tag },
     validationSchema: Yup.object({
       title: Yup.string()
         .min(3, "Min 3 chars")
         .max(50, "Max 50 chars")
         .required("Title is required"),
       content: Yup.string().max(500, "Max 500 chars"),
-      tag: Yup.mixed<NoteTag>()
+      tag: Yup.mixed<Tag>()
         .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"])
         .required("Required"),
     }),

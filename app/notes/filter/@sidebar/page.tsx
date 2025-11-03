@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import css from "./SidebarNotes.module.css";
-import { NoteTag } from "@/types/note";
+import { Tag } from "@/types/note";
 
-const TAGS: NoteTag[] = ["Todo", "Work", "Personal", "Meeting", "Shopping"]; 
+const TAGS: Tag[] = ["Todo", "Work", "Personal", "Meeting", "Shopping"]; 
 
 export default function SidebarNotes() {
   return (

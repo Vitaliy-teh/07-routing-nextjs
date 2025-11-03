@@ -1,78 +1,70 @@
-"use client";
 
-import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDebounce } from "use-debounce";
-import { fetchNotes, deleteNote, type FetchNotesResponse } from "@/lib/api";
-import NoteList from "@/components/NoteList/NoteList";
-import { SearchBox } from "@/components/SearchBox/SearchBox";
-import { Pagination } from "@/components/Pagination/Pagination";
-import { Loader } from "@/components/Loader/Loader";
-import { ErrorMessage } from "@/components/ErrorMessage/ErrorMessage";
-import { EmptyState } from "@/components/EmptyState/EmptyState";
-import { Modal } from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
-import css from "@/app/NotesPage.module.css";
+'use client';
 
-export default function NotesClient() {
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearch] = useDebounce(searchTerm, 500);
-  const [showModal, setShowModal] = useState(false);
+import { useState } from 'react';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useDebouncedCallback } from 'use-debounce';
+import { Modal } from '@/components/Modal/Modal';
+import NoteList from '@/components/NoteList/NoteList';
+import { SearchBox } from '@/components/SearchBox/SearchBox';
+import { Pagination } from '@/components/Pagination/Pagination';
+import NoteForm from '@/components/NoteForm/NoteForm';
+import { fetchNotes } from '@/lib/api';
+import { Tag } from '@/types/note';
+import css from './page.module.css';
 
-  const queryClient = useQueryClient();
+interface NotesClientProps {
+  tag: Tag | string;
+}
 
-  const { data, isLoading, error } = useQuery<FetchNotesResponse, Error>({
-    queryKey: ["notes", page, debouncedSearch],
-    queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
-    placeholderData: prev => prev,
-    staleTime: 5000,
+export default function NotesClient({ tag }: NotesClientProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const { data } = useQuery({
+    queryKey: ['notes', { searchText, currentPage, tag }],
+    queryFn: () => fetchNotes({ searchText, page: currentPage, tag }),
+    placeholderData: keepPreviousData,
+    refetchOnMount: false,
   });
 
-  const handleDeleteNote = async (id: string) => {
-    try {
-      await deleteNote(id);
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-    } catch (err) {
-      console.error("Failed to delete note:", err);
-    }
-  };
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+  const changeSearchQuery = useDebouncedCallback((newQuery: string) => {
+    setCurrentPage(1);
+    setSearchText(newQuery);
+  }, 300);
+
+  const totalPages = data?.totalPages ?? 0;
+  const notes = data?.notes ?? [];
 
   return (
     <div className={css.app}>
-      <header className={css.toolbar}>
-        <SearchBox
-          value={searchTerm}
-          onChange={searchValue => {
-            setSearchTerm(searchValue);
-            setPage(1);
-          }}
-        />
-        {data && data.totalPages > 1 && (
-          <Pagination
-            totalPages={data?.totalPages ?? 1}
-            currentPage={page}
-            onPageChange={({ selected }) => setPage(selected + 1)}
-          />
-        )}
-        <button className={css.button} onClick={() => setShowModal(true)}>
-          Create note +
-        </button>
-      </header>
+      <main>
+        <section>
+          <header className={css.toolbar}>
+            <SearchBox onSearch={changeSearchQuery} />
+            {totalPages > 1 && (
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+              />
+            )}
+            <button className={css.button} onClick={toggleModal}>
+              Create note +
+            </button>
+          </header>
 
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <NoteForm onClose={() => setShowModal(false)} />
-        </Modal>
-      )}
-
-      {isLoading && <Loader />}
-      {error && <ErrorMessage message="Failed to load notes." />}
-      {data?.notes?.length ? (
-        <NoteList notes={data.notes} onDelete={handleDeleteNote} />
-      ) : (
-        !isLoading && !error && <EmptyState />
-      )}
+          {isModalOpen && (
+            <Modal onClose={toggleModal}>
+              <NoteForm onClose={toggleModal} />
+            </Modal>
+          )}
+          {notes.length > 0 && <NoteList notes={notes} />}
+        </section>
+      </main>
     </div>
   );
 }
