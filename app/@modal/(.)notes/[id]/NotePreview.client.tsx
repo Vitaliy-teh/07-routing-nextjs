@@ -20,6 +20,7 @@ export default function NotePreviewClient({ id }: NotePreviewProps) {
   } = useQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
+    refetchOnMount: false,
   });
 
   const handleClose = () => {
@@ -47,7 +48,7 @@ export default function NotePreviewClient({ id }: NotePreviewProps) {
         <p className={css.text}>{note.content}</p>
         <div className={css.meta}>
           <span className={css.tag}>{note.tag}</span>
-          <span className={css.date}>{new Date(note.updatedAt).toLocaleString()}</span>
+          <span className={css.date}>{new Date(note.createdAt).toLocaleString()}</span>
         </div>
       </div>
     </Modal>
