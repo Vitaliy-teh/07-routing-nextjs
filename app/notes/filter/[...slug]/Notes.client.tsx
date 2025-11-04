@@ -44,7 +44,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
       <main>
         <section>
           <header className={css.toolbar}>
-            <SearchBox onSearch={changeSearchQuery} />
+            <SearchBox value={searchText} onSearch={changeSearchQuery} />
             {totalPages > 1 && (
               <Pagination
                 totalPages={totalPages}

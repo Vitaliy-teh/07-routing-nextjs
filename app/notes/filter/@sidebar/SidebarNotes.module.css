@@ -1,3 +1,9 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .menuList {
   list-style-type: none;
   margin: 0;
@@ -15,6 +21,7 @@
   display: block;
   padding: 8px 16px;
   transition: background-color 0.3s ease;
+  
 }
 
 .menuLink:hover {
